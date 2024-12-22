@@ -1,4 +1,6 @@
-![](https://i.ibb.co/31947wq/Git-Hub-Social-Preview.png)
+<p align="center">
+    <img src="https://i.ibb.co/31947wq/Git-Hub-Social-Preview.png" alt="Publish" style="display: block; margin: 0 auto; width: 100%;">
+</p>
 <p align="center">
   <a>
     <img src="https://img.shields.io/badge/Status-Waiting Submission-orange" alt="Publish">
