@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct RowSettingsToggle: View {
     var title: String
     var icon: String
