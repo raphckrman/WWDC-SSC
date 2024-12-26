@@ -19,7 +19,7 @@ struct RoundedButton: View {
         }) {
             ZStack {
                 Text(title)
-                    .foregroundColor(primary ? .primary : .primary.opacity(0.6))
+                    .foregroundColor(primary ? .white : .primary.opacity(0.6))
                     .fontWeight(.semibold)
             }
             .frame(width: width)
