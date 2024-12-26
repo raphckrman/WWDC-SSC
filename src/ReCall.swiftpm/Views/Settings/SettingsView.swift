@@ -24,7 +24,7 @@ struct SettingsView: View {
                 Section(header: Text("Resources").offset(x: -15)) {
                     RowSettingsNavigation(title: "Tutorial", icon: "sparkles.tv.fill", color: Color.accentColor, destination: AnyView(BlankView()))
                     RowSettingsNavigation(title: "Acknowledgments", icon: "person.2.fill", color: Color.accentColor, destination: AnyView(BlankView()))
-                    RowSettingsNavigation(title: "GitHub Repository", icon: "curlybraces.square.fill", color: Color.accentColor, destination: AnyView(BlankView()), url: "https://github.com")
+                    RowSettingsNavigation(title: "GitHub Repository", icon: "curlybraces.square.fill", color: Color.accentColor, destination: AnyView(BlankView()), url: "https://github.com/raphckrman/WWDC-SSC")
                 }
             }
             .frame(height: 800)
