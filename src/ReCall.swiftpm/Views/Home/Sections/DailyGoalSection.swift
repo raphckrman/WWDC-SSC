@@ -23,6 +23,15 @@ struct DailyGoalSection: View {
                     .padding(.top, UIDevice.current.userInterfaceIdiom == .pad ? 50 : 0)
                 Spacer()
             }
+            HStack {
+                Spacer()
+                VStack {
+                    RoundedButton(title: "Start Studying", width: 300)
+                    RoundedButton(title: "Add Reminder", width: 300, primary: false)
+                }
+                Spacer()
+            }
+            .offset(y: -height / 2)
         }
     }
 }
