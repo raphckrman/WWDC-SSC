@@ -1,10 +1,13 @@
 import SwiftUI
+import SwiftData
 
 @main
-struct MyApp: App {
+@available(iOS 17, *)
+struct ReCall: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
+        .modelContainer(for: FolderItem.self)
     }
 }
