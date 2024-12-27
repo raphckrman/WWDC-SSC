@@ -13,12 +13,13 @@ struct DailyGoalSection: View {
     var height: CGFloat {
             UIDevice.current.userInterfaceIdiom == .pad ? 450 : 300
         }
+    @State private var DailyGoal: Int = 0
         
     var body: some View {
         sectionTitle("Daily Goal") {
             HStack {
                 Spacer()
-                CircularProgressMaskedView(height: height, goal: 3600, progression: 1132)
+                CircularProgressMaskedView(height: height, goal: CGFloat(DailyGoal*60), progression: 0)
                     .padding()
                     .padding(.top, UIDevice.current.userInterfaceIdiom == .pad ? 50 : 0)
                 Spacer()
@@ -32,6 +33,9 @@ struct DailyGoalSection: View {
                 Spacer()
             }
             .offset(y: -height / 2)
+        }
+        .onAppear {
+            DailyGoal = UserDefaults.standard.integer(forKey: "dailyGoal")
         }
     }
 }

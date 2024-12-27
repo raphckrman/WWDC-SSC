@@ -44,7 +44,7 @@ struct CircularProgress: View {
                 Text("Today's Studying")
                     .font(.system(size: height * 0.06)) // don't ask why...
                     .fontWeight(.bold)
-                Text("\(convertSecondsToMinutesAndSeconds(seconds: progression).minutes):\(convertSecondsToMinutesAndSeconds(seconds: progression).seconds)")
+                Text(String(format: "%02d:%02d", convertSecondsToMinutesAndSeconds(seconds: progression).minutes, convertSecondsToMinutesAndSeconds(seconds: progression).seconds))
                     .font(.system(size: height * 0.20))
                     .fontWeight(.bold)
                 Text("of your \(convertSecondsToMinutesAndSeconds(seconds: goal).minutes)-minutes goal")

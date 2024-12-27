@@ -19,6 +19,7 @@ struct NotificationsView: View {
                     EnableNotificatonsSection(notificationEnabled: $notificationEnabled, notificationPermissionGranted: notificationPermissionGranted)
                     SpecificNotificationsSection()
                         .disabled(!notificationEnabled)
+                        .animation(.linear(duration: 0.1), value: notificationEnabled)
                 } else {
                     OpenSettingsSection()
                 }
