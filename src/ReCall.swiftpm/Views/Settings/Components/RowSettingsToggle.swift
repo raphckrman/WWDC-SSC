@@ -11,9 +11,10 @@ struct RowSettingsToggle: View {
     var title: String
     var icon: String
     var color: Color
-    @State private var isOn: Bool = false
+    @Binding var isOn: Bool
     var action: ((Bool) -> Void)? = nil
-
+    var disabled: Bool?
+    
     var body: some View {
         Toggle(isOn: Binding(
             get: { isOn },
@@ -30,5 +31,6 @@ struct RowSettingsToggle: View {
                     .foregroundStyle(color)
             }
         }
+        .disabled(disabled ?? false)
     }
 }
