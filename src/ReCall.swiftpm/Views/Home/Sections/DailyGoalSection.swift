@@ -9,12 +9,12 @@ import SwiftUI
 
 @available(iOS 17, *)
 struct DailyGoalSection: View {
-    var folders: [FolderItem]
     var height: CGFloat {
             UIDevice.current.userInterfaceIdiom == .pad ? 450 : 300
         }
-    @State private var DailyGoal: Int = 0
-        
+    @AppStorage("dailyGoal") private var DailyGoal: Int = 10
+    @State private var showModal = false
+
     var body: some View {
         sectionTitle("Daily Goal") {
             HStack {
@@ -22,6 +22,9 @@ struct DailyGoalSection: View {
                 CircularProgressMaskedView(height: height, goal: CGFloat(DailyGoal*60), progression: 0)
                     .padding()
                     .padding(.top, UIDevice.current.userInterfaceIdiom == .pad ? 50 : 0)
+                    .onLongPressGesture {
+                        showModal.toggle()
+                   }
                 Spacer()
             }
             HStack {
@@ -34,8 +37,9 @@ struct DailyGoalSection: View {
             }
             .offset(y: -height / 2)
         }
-        .onAppear {
-            DailyGoal = UserDefaults.standard.integer(forKey: "dailyGoal")
+        .sheet(isPresented: $showModal) {
+            DailyGoalPicker()
+                .presentationDetents([.fraction(0.3)])
         }
     }
 }

@@ -9,24 +9,28 @@ import SwiftUI
 
 struct SettingsView: View {
     @State private var toggle = false
-    @State private var showAlert = false
-    @State private var enteredNumber: String = ""
     @State private var actualDailyGoal: Int = 0
+    @State private var showModal = false
+    
+    @AppStorage("hapticsEnabled") private var hapticsEnabled: Bool = true
+    @AppStorage("studyStreakEnabled") private var studyStreakEnabled: Bool = true
+    @AppStorage("studyHoursTrackEnabled") private var studyHoursTrackEnabled: Bool = true
+    @AppStorage("progressOverviewEnabled") private var progressOverviewEnabled: Bool = true
 
     var body: some View {
         BaseView(title: "Settings") {
             List {
                 Section(header: Text("General").offset(x: -15)) {
                     RowSettingsNavigation(title: "Notifications", icon: "bell.fill", color: Color.accentColor, destination: AnyView(NotificationsView()))
-                    RowSettingsToggle(title: "Vibrations", icon: "waveform.path", color: Color.accentColor, isOn: $toggle)
+                    RowSettingsToggle(title: "Haptics", icon: "waveform.path", color: Color.accentColor, isOn: $hapticsEnabled)
                     RowSettingsButton(title: "Daily Goal", icon: "target", color: Color.accentColor, action: {
-                        showAlert.toggle()
+                        showModal.toggle()
                     })
                 }
                 Section(header: Text("Stats").offset(x: -15)) {
-                    RowSettingsToggle(title: "Study Streak", icon: "flame.fill", color: Color.accentColor, isOn: $toggle)
-                    RowSettingsToggle(title: "Study Hours Tracking", icon: "clock.fill", color: Color.accentColor, isOn: $toggle)
-                    RowSettingsToggle(title: "Progress Overview", icon: "chart.bar.fill", color: Color.accentColor, isOn: $toggle)
+                    RowSettingsToggle(title: "Study Streak", icon: "flame.fill", color: Color.accentColor, isOn: $studyStreakEnabled)
+                    RowSettingsToggle(title: "Study Hours Tracking", icon: "clock.fill", color: Color.accentColor, isOn: $studyHoursTrackEnabled)
+                    RowSettingsToggle(title: "Progress Overview", icon: "chart.bar.fill", color: Color.accentColor, isOn: $progressOverviewEnabled)
                 }
                 Section(header: Text("Resources").offset(x: -15)) {
                     RowSettingsNavigation(title: "Tutorial", icon: "sparkles.tv.fill", color: Color.accentColor, destination: AnyView(BlankView()))
@@ -37,22 +41,9 @@ struct SettingsView: View {
             .frame(height: 600)
             .background(.clear)
             .scrollContentBackground(.hidden)
-            .alert("Enter your daily goal (in minutes)", isPresented: $showAlert) {
-                TextField("", text: $enteredNumber)
-                    .keyboardType(.numberPad)
-                    .textInputAutocapitalization(.never)
-                
-                Button("OK") {
-                    if let number = Int(enteredNumber) {
-                        UserDefaults.standard.set(number, forKey: "dailyGoal")
-                        actualDailyGoal = number
-                    }
-                }
-                
-                Button("Cancel", role: .cancel) {
-                }
-            } message: {
-                Text("Veuillez entrer un nombre.")
+            .sheet(isPresented: $showModal) {
+                DailyGoalPicker()
+                    .presentationDetents([.fraction(0.3)])
             }
         }
         .onAppear {

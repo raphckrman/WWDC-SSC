@@ -8,21 +8,22 @@
 import SwiftUI
 
 struct EnableNotificatonsSection: View {
-    @Binding var notificationEnabled: Bool
+    @AppStorage("notificationsEnabled") private var notificationEnabled: Bool = false
     var notificationPermissionGranted: Bool
 
     var body: some View {
         Section {
-            RowSettingsToggle(title: "Enable Notifications", icon: notificationEnabled ? "bell.fill" : "bell.slash.fill", color: notificationEnabled ? Color.accentColor : Color(UIColor.gray), isOn: $notificationEnabled, disabled: !notificationPermissionGranted)
-                .onChange(of: notificationEnabled) { newValue in
-                    print("[DEBUG] New Value: \(newValue)")
-                    Task {
-                        UserDefaults.standard.set(newValue, forKey: "notificationsEnabled")
-                    }
-                }
-                .animation(.linear(duration: 0.1), value: notificationEnabled)
+            RowSettingsToggle(
+                title: "Enable Notifications",
+                icon: notificationEnabled ? "bell.fill" : "bell.slash.fill",
+                color: notificationEnabled ? Color.accentColor : Color(UIColor.gray),
+                isOn: $notificationEnabled,
+                disabled: !notificationPermissionGranted
+            )
+            .animation(.linear(duration: 0.1), value: notificationEnabled)
         } header: {
-            Spacer(minLength: 0).listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+            Spacer(minLength: 0)
+                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
         }
     }
 }

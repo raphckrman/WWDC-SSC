@@ -11,10 +11,11 @@ func triggerTestNotification() {
     let content = UNMutableNotificationContent()
     content.title = "Ready for studying?"
     content.body = "Your Math Exam is in 3 days! Time to review, you've got this! 💪"
-    content.sound = UNNotificationSound.default
+    content.sound = UNNotificationSound.defaultCritical
+    content.interruptionLevel = UNNotificationInterruptionLevel.critical
 
     let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
-    let request = UNNotificationRequest(identifier: "UpcomingExamTest", content: content, trigger: trigger)
+    let request = UNNotificationRequest(identifier: "UpcomingExamTest_\(CGFloat.random(in: 1..<100))", content: content, trigger: trigger)
 
     UNUserNotificationCenter.current().add(request) { error in
         if let error = error {

@@ -16,7 +16,7 @@ struct HomeView: View {
         BaseView(title: "Home") {
             ContinueSection(folders: folders)
             UpcomingExamsSection(folders: folders)
-            DailyGoalSection(folders: folders)
+            DailyGoalSection()
         }
     }
 }

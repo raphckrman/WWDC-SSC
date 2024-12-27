@@ -8,17 +8,17 @@
 import SwiftUI
 
 struct SpecificNotificationsSection: View {
-    @State private var reminderNotifications = false
-    @State private var dailyGoalNotifications = false
-    @State private var studyCycleNotifications = false
-    @State private var upcomingExamsNotifications = false
+    @AppStorage("reminderNotifications") private var reminderNotifications: Bool = false
+    @AppStorage("dailyGoalNotifications") private var dailyGoalNotifications: Bool = false
+    @AppStorage("studyCycleNotifications") private var studyCycleNotifications: Bool = false
+    @AppStorage("upcomingExamsNotifications") private var upcomingExamsNotifications: Bool = false
 
     var body: some View {
         Section {
-            RowSettingsToggle(title: "Reminder", icon: "calendar", color: Color.accentColor, isOn: $reminderNotifications, action: { newValue in UserDefaults.standard.set(newValue, forKey: "reminderNotifications") })
-            RowSettingsToggle(title: "Daily Goal", icon: "target", color: Color.accentColor, isOn: $dailyGoalNotifications, action: { newValue in UserDefaults.standard.set(newValue, forKey: "dailyGoalNotifications") })
-            RowSettingsToggle(title: "Study Cycle", icon: "arrow.trianglehead.counterclockwise", color: Color.accentColor, isOn: $studyCycleNotifications, action: { newValue in UserDefaults.standard.set(newValue, forKey: "studyCycleNotifications") })
-            RowSettingsToggle(title: "Upcoming Exams", icon: "clock", color: Color.accentColor, isOn: $upcomingExamsNotifications, action: { newValue in UserDefaults.standard.set(newValue, forKey: "upcomingExamsNotifications") })
+            RowSettingsToggle(title: "Reminder", icon: "calendar", color: Color.accentColor, isOn: $reminderNotifications)
+            RowSettingsToggle(title: "Daily Goal", icon: "target", color: Color.accentColor, isOn: $dailyGoalNotifications)
+            RowSettingsToggle(title: "Study Cycle", icon: "arrow.trianglehead.counterclockwise", color: Color.accentColor, isOn: $studyCycleNotifications)
+            RowSettingsToggle(title: "Upcoming Exams", icon: "clock", color: Color.accentColor, isOn: $upcomingExamsNotifications)
         }
         .onAppear {
             Task {

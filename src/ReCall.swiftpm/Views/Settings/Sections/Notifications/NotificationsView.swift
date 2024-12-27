@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NotificationsView: View {
-    @State private var notificationEnabled = false
+    @AppStorage("notificationsEnabled") private var notificationEnabled: Bool = false
     @State private var notificationPermissionGranted = false
     @StateObject private var notificationManager = NotificationManager()
     
@@ -16,7 +16,7 @@ struct NotificationsView: View {
         BaseView(title: "Notifications") {
             List {
                 if notificationPermissionGranted {
-                    EnableNotificatonsSection(notificationEnabled: $notificationEnabled, notificationPermissionGranted: notificationPermissionGranted)
+                    EnableNotificatonsSection(notificationPermissionGranted: notificationPermissionGranted)
                     SpecificNotificationsSection()
                         .disabled(!notificationEnabled)
                         .animation(.linear(duration: 0.1), value: notificationEnabled)
@@ -29,10 +29,7 @@ struct NotificationsView: View {
             .environment(\.defaultMinListHeaderHeight, 0)
             .onAppear {
                 Task {
-                    notificationEnabled = UserDefaults.standard.value(forKey: "notificationsEnabled") as! Bool? ?? false
                     notificationPermissionGranted = await notificationManager.isNotificationPermissionGranted()
-                    print("[DEBUG] Task Executed")
-                    print(UserDefaults.standard.value(forKey: "notificationsEnabled") as! Bool? ?? false)
                 }
             }
         }
