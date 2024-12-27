@@ -16,7 +16,7 @@ struct SettingsView: View {
                 Section(header: Text("General").offset(x: -15)) {
                     RowSettingsNavigation(title: "Notifications", icon: "bell.fill", color: Color.accentColor, destination: AnyView(NotificationsView()))
                     RowSettingsNavigation(title: "Vibrations", icon: "waveform.path", color: Color.accentColor, destination: AnyView(BlankView()))
-                    RowSettingsNavigation(title: "Daily Goal", icon: "timer", color: Color.accentColor, destination: AnyView(BlankView()))
+                    RowSettingsNavigation(title: "Daily Goal", icon: "target", color: Color.accentColor, destination: AnyView(BlankView()))
                 }
                 Section(header: Text("Stats").offset(x: -15)) {
                     RowSettingsToggle(title: "Study Streak", icon: "flame.fill", color: Color.accentColor, isOn: $toggle)

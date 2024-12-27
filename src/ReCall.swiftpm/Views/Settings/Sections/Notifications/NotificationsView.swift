@@ -17,11 +17,13 @@ struct NotificationsView: View {
             List {
                 if notificationPermissionGranted {
                     EnableNotificatonsSection(notificationEnabled: $notificationEnabled, notificationPermissionGranted: notificationPermissionGranted)
+                    SpecificNotificationsSection()
+                        .disabled(!notificationEnabled)
                 } else {
                     OpenSettingsSection()
                 }
             }
-            .frame(height: 200)
+            .frame(height: 300)
             .scrollContentBackground(.hidden)
             .environment(\.defaultMinListHeaderHeight, 0)
             .onAppear {

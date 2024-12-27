@@ -25,7 +25,10 @@ class NotificationManager: ObservableObject {
         do {
             let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: authOptions)
             UserDefaults.standard.set(granted, forKey: "notificationsEnabled")
-            
+            UserDefaults.standard.set(granted, forKey: "reminderNotifications")
+            UserDefaults.standard.set(granted, forKey: "dailyGoalNotifications")
+            UserDefaults.standard.set(granted, forKey: "studyCycleNotifications")
+            UserDefaults.standard.set(granted, forKey: "upcomingExamsNotifications")
             if granted {
                 print("[DEBUG] Permission Granted")
             } else {
@@ -33,6 +36,10 @@ class NotificationManager: ObservableObject {
             }
         } catch {
             UserDefaults.standard.set(false, forKey: "notificationsEnabled")
+            UserDefaults.standard.set(false, forKey: "reminderNotifications")
+            UserDefaults.standard.set(false, forKey: "dailyGoalNotifications")
+            UserDefaults.standard.set(false, forKey: "studyCycleNotifications")
+            UserDefaults.standard.set(false, forKey: "upcomingExamsNotifications")
             print("[DEBUG] Error: \(error.localizedDescription)")
         }
     }
