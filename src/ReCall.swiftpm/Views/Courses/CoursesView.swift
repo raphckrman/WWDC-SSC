@@ -6,35 +6,32 @@
 //
 
 import SwiftUI
+import SwiftData
 
-func triggerTestNotification() {
-    let content = UNMutableNotificationContent()
-    content.title = "Ready for studying?"
-    content.body = "Your Math Exam is in 3 days! Time to review, you've got this! 💪"
-    content.sound = UNNotificationSound.defaultCritical
-    content.interruptionLevel = UNNotificationInterruptionLevel.critical
-
-    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
-    let request = UNNotificationRequest(identifier: "UpcomingExamTest_\(CGFloat.random(in: 1..<100))", content: content, trigger: trigger)
-
-    UNUserNotificationCenter.current().add(request) { error in
-        if let error = error {
-            print("Error adding notification: \(error.localizedDescription)")
-        } else {
-            print("Test exam notification scheduled successfully.")
-        }
-    }
-}
-
-
+@available(iOS 17, *)
 struct CoursesView: View {
+    @Query(sort: \FolderItem.name) var folders: [FolderItem]
+    @State private var showCourseCreate = false
+    
     var body: some View {
         BaseView(title: "Courses") {
-            Button(action: {
-                triggerTestNotification()
-            }) {
-                Text("Trigger Upcoming Exams")
-            }
+
+        } toolbarContent: {
+            AnyView(
+                HStack {
+                    Button("Filter", systemImage: "line.3.horizontal.decrease.circle") {
+                        print("Filtering Courses")
+                    }
+                    Button("Create", systemImage: "plus.circle") {
+                        showCourseCreate.toggle()
+                    }
+                }
+            )
+        }
+        .sheet(isPresented: $showCourseCreate) {
+            CourseCreate()
+                .presentationDetents([.fraction(0.4)])
+
         }
     }
 }

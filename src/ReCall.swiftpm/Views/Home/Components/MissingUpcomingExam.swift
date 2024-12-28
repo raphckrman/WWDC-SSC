@@ -12,7 +12,7 @@ struct MissingUpcomingExam: View {
 
     var body: some View {
         Button(action: {
-            print("Button tapped")
+            action?()
         }) {
             ZStack {
                 HStack {

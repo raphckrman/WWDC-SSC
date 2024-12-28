@@ -13,9 +13,13 @@ import SwiftData
 class FolderItem: Identifiable {
     var id: UUID
     var name: String
+    var subject: String
+    var examDate: Date?
     
-    init(name: String) {
+    init(name: String, subject: String, examDate: Date?) {
         self.id = UUID()
         self.name = name
+        self.subject = subject
+        self.examDate = examDate
     }
 }

@@ -7,13 +7,16 @@
 
 import SwiftUI
 
+
 struct BaseView<Content: View>: View {
     let title: String
     let content: Content
+    let toolbarContent: AnyView?
 
-    init(title: String, @ViewBuilder content: () -> Content) {
+    init(title: String, @ViewBuilder content: () -> Content, toolbarContent: (() -> AnyView)? = nil) {
         self.title = title
         self.content = content()
+        self.toolbarContent = toolbarContent?()
     }
 
     var body: some View {
@@ -34,6 +37,11 @@ struct BaseView<Content: View>: View {
             .navigationBarTitleDisplayMode(.large)
             .navigationSplitViewColumnWidth(0)
             .frame(maxWidth: .infinity)
+            .toolbar {
+                if let toolbarContent = toolbarContent {
+                    toolbarContent
+                }
+            }
         }
     }
 }

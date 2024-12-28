@@ -11,11 +11,12 @@ import SwiftData
 @available(iOS 17, *)
 struct HomeView: View {
     @Query(sort: \FolderItem.name) var folders: [FolderItem]
-    
+    @Binding var selectedTab: Int
+
     var body: some View {
         BaseView(title: "Home") {
-            ContinueSection(folders: folders)
-            UpcomingExamsSection(folders: folders)
+            ContinueSection(folders: folders, selectedTab: $selectedTab)
+            UpcomingExamsSection(folders: folders, selectedTab: $selectedTab)
             DailyGoalSection()
         }
     }
