@@ -31,7 +31,9 @@ struct ContinueSection: View {
                     }
                     Spacer()
                 }
+                .scrollTargetLayout()
             }
+            .scrollTargetBehavior(.viewAligned)
         }
     }
 }

@@ -15,7 +15,10 @@ struct CoursesView: View {
     
     var body: some View {
         BaseView(title: "Courses") {
-
+            if folders.isEmpty {
+                ContentUnavailableView("No Courses", systemImage: "note", description: Text("Create your first course !"))
+                    .padding(.top, 200)
+            }
         } toolbarContent: {
             AnyView(
                 HStack {
