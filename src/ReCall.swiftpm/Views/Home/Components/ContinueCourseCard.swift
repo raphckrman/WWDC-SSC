@@ -36,9 +36,10 @@ struct ContinueCourseCard: View {
                             .foregroundColor(.primary.opacity(0.6))
                             .padding(.top, 30)
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     Spacer().frame(width: 50)
                     VStack(alignment: .leading) {
-                        Image(systemName: "atom")
+                        Image(systemName: getIconFromString(word: folder.subject))
                             .font(.system(size: 24))
                             .frame(width: 50, height: 50)
                             .foregroundColor(Color.accentColor)
