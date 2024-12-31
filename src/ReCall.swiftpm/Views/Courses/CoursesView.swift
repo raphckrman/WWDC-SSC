@@ -18,6 +18,19 @@ struct CoursesView: View {
             if folders.isEmpty {
                 ContentUnavailableView("No Courses", systemImage: "note", description: Text("Create your first course !"))
                     .padding(.top, 200)
+            } else {
+                ScrollView() {
+                    VStack(spacing: 10) {
+                        ForEach(folders, id: \.id) { folder in
+                            ContinueCourseCard(folder: folder)
+                        }
+                    }
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .scrollDisabled(true)
+                .scrollContentBackground(.hidden)
+                .environment(\.defaultMinListHeaderHeight, 0)
             }
         } toolbarContent: {
             AnyView(
