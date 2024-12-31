@@ -9,6 +9,8 @@ import SwiftUI
 
 @available(iOS 17, *)
 struct ContinueCourseCard: View {
+    @Environment(\.modelContext) private var context
+
     var folder: FolderItem
     var action: (() -> Void)? = nil
 
@@ -62,6 +64,24 @@ struct ContinueCourseCard: View {
             .frame(height: 125)
             .background(Color(UIColor.secondarySystemBackground))
             .cornerRadius(12)
+            .contextMenu {
+                Button(action: {
+                    print("Bookmark")
+                }) {
+                    Label("Add Bookmark", systemImage: "star")
+                }
+
+                Button(action: {
+                    print("Edit")
+                }) {
+                    Label("Edit", systemImage: "pencil")
+                }
+                Button(role: .destructive, action: {
+                    context.delete(folder)
+                }) {
+                    Label("Delete", systemImage: "trash")
+                }
+            }
         }
         .buttonStyle(PressableScaleStyle())
     }

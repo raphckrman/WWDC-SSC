@@ -23,14 +23,18 @@ struct CoursesView: View {
                     VStack(spacing: 10) {
                         ForEach(folders, id: \.id) { folder in
                             ContinueCourseCard(folder: folder)
+                                .transition(.move(edge: .trailing))
+                                .animation(.easeInOut(duration: 0.3), value: folders)
                         }
                     }
+                    .padding(.all, 40)
                 }
                 .padding()
                 .frame(maxWidth: .infinity)
                 .scrollDisabled(true)
                 .scrollContentBackground(.hidden)
                 .environment(\.defaultMinListHeaderHeight, 0)
+                .padding(.all, -40)
             }
         } toolbarContent: {
             AnyView(

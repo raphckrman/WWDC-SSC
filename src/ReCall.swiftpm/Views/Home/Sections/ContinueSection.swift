@@ -27,12 +27,16 @@ struct ContinueSection: View {
                     } else {
                         ForEach(folders.sorted(by: { $0.lastReviewedDate > $1.lastReviewedDate }), id: \.id) { folder in
                             ContinueCourseCard(folder: folder)
+                                .transition(.move(edge: .trailing))
+                                .animation(.easeInOut(duration: 0.3), value: folders)
                         }
                     }
                     Spacer()
                 }
+                .padding(.vertical, 40)
                 .scrollTargetLayout()
             }
+            .padding(.vertical, -40)
             .scrollTargetBehavior(.viewAligned)
         }
     }
