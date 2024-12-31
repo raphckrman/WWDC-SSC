@@ -16,7 +16,7 @@ struct ContentView: View {
             }
             .tag(1)
             BlankView().tabItem {
-                Label("Live", systemImage: "flame.fill")
+                Label("Stats", systemImage: "chart.bar.fill")
             }
             .tag(2)
             SettingsView().tabItem {
