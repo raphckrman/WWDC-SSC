@@ -25,7 +25,7 @@ struct ContinueSection: View {
                         TipsCard(sentence: "Study anytime, even without internet. This app works entirely offline.")
                         TipsCard(sentence: "Work for 25 minutes, then take a 5-minute break to stay focused and productive.")
                     } else {
-                        ForEach(folders, id: \.id) { folder in
+                        ForEach(folders.sorted(by: { $0.lastReviewedDate > $1.lastReviewedDate }), id: \.id) { folder in
                             ContinueCourseCard(folder: folder)
                         }
                     }

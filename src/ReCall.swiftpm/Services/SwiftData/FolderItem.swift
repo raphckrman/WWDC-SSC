@@ -14,12 +14,14 @@ class FolderItem: Identifiable {
     var id: UUID
     var name: String
     var subject: String
+    var lastReviewedDate: Date
     var examDate: Date?
     
-    init(name: String, subject: String, examDate: Date?) {
+    init(name: String, subject: String, examDate: Date? = nil) {
         self.id = UUID()
         self.name = name
         self.subject = subject
+        self.lastReviewedDate = Date()
         self.examDate = examDate
     }
 }
