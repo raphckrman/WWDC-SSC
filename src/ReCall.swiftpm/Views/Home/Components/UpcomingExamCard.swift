@@ -9,11 +9,14 @@ import SwiftUI
 
 @available(iOS 17, *)
 struct UpcomingExamCard: View {
+    @Environment(\.modelContext) private var context
+
     let folder: FolderItem
+    var action: (() -> Void)? = nil
     
     var body: some View {
         Button(action: {
-            print("Button tapped")
+            action?()
         }) {
             HStack {
                 VStack(alignment: .leading) {
@@ -40,6 +43,24 @@ struct UpcomingExamCard: View {
                 HStack {
                     Image(systemName: "chevron.right")
                         .foregroundColor(.primary.opacity(0.2))
+                }
+            }
+            .contextMenu {
+                Button(action: {
+                    print("Bookmark")
+                }) {
+                    Label("Add Bookmark", systemImage: "star")
+                }
+
+                Button(action: {
+                    print("Edit")
+                }) {
+                    Label("Edit", systemImage: "pencil")
+                }
+                Button(role: .destructive, action: {
+                    context.delete(folder)
+                }) {
+                    Label("Delete", systemImage: "trash")
                 }
             }
         }

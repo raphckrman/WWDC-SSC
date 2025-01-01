@@ -50,7 +50,7 @@ struct CoursesView: View {
         }
         .sheet(isPresented: $showCourseCreate) {
             CourseCreate()
-                .presentationDetents([.fraction(0.4)])
+                .presentationDetents([.fraction(0.45)])
 
         }
     }

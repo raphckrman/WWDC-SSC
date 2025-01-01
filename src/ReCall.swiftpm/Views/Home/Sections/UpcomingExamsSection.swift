@@ -22,8 +22,10 @@ struct UpcomingExamsSection: View {
                         })
                     } else {
                         ForEach(folders.sorted { ($0.examDate ?? Date.distantFuture) < ($1.examDate ?? Date.distantFuture) }, id: \.id) { folder in
-                            if let examDate = folder.examDate {
+                            if folder.examDate != nil {
                                 UpcomingExamCard(folder: folder)
+                                    .transition(.move(edge: .trailing))
+                                    .animation(.easeInOut(duration: 0.3), value: folders)
                             }
                         }
                     }
