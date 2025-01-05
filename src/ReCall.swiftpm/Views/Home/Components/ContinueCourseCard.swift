@@ -10,14 +10,13 @@ import SwiftUI
 @available(iOS 17, *)
 struct ContinueCourseCard: View {
     @Environment(\.modelContext) private var context
+    @State private var showCourseEdit = false
+    @State private var showAlert = false
 
     var folder: FolderItem
-    var action: (() -> Void)? = nil
 
     var body: some View {
-        Button(action: {
-            action?()
-        }) {
+        NavigationLink(destination: CourseView(folder: folder)) {
             VStack {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading) {
@@ -31,7 +30,7 @@ struct ContinueCourseCard: View {
                             .foregroundColor(.primary)
                             .multilineTextAlignment(.leading)
                             .lineLimit(2)
-                        
+
                         Text("22 Flashcards • 53%")
                             .font(.subheadline)
                             .fontWeight(.medium)
@@ -54,7 +53,7 @@ struct ContinueCourseCard: View {
                 .padding(.trailing, 10)
                 .padding(.vertical, 5)
                 .padding(.top, 10)
-                
+
                 HStack {
                     Spacer()
                 }
@@ -66,22 +65,37 @@ struct ContinueCourseCard: View {
             .cornerRadius(12)
             .contextMenu {
                 Button(action: {
-                    print("Bookmark")
+                    folder.favorite = !folder.favorite
+                    try? context.save()
                 }) {
-                    Label("Add Bookmark", systemImage: "star")
+                    Label("Add Bookmark", systemImage: folder.favorite ? "bookmark.fill" : "bookmark")
                 }
-
                 Button(action: {
-                    print("Edit")
+                    showCourseEdit.toggle()
                 }) {
                     Label("Edit", systemImage: "pencil")
                 }
                 Button(role: .destructive, action: {
-                    context.delete(folder)
+                    showAlert.toggle()
                 }) {
                     Label("Delete", systemImage: "trash")
                 }
             }
+        }
+        .sheet(isPresented: $showCourseEdit) {
+            CourseEdit(folder: folder)
+                .presentationDetents([.fraction(0.45)])
+
+        }
+        .alert(isPresented: $showAlert) {
+            Alert(
+                title: Text("Confirm Deletion"),
+                message: Text("Are you sure you want to delete this item? This action cannot be undone."),
+                primaryButton: .destructive(Text("Delete")) {
+                    context.delete(folder)
+                },
+                secondaryButton: .cancel()
+            )
         }
         .buttonStyle(PressableScaleStyle())
     }

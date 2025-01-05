@@ -11,7 +11,9 @@ import SwiftUI
 struct ContinueSection: View {
     var folders: [FolderItem]
     @Binding var selectedTab: Int
-
+    @State private var selectedFolder: FolderItem?
+    @State private var showCourseCreate = false
+    
     var body: some View {
         sectionTitle("Continue") {
             ScrollView(.horizontal) {
@@ -19,7 +21,7 @@ struct ContinueSection: View {
                     Spacer()
                     if folders.isEmpty {
                         MissingRecentCourse(action: {
-                            selectedTab = 1
+                            showCourseCreate.toggle()
                         })
                         TipsCard(sentence: "Frequent, short sessions are more effective than long cram sessions.")
                         TipsCard(sentence: "Study anytime, even without internet. This app works entirely offline.")
@@ -38,6 +40,10 @@ struct ContinueSection: View {
             }
             .padding(.vertical, -40)
             .scrollTargetBehavior(.viewAligned)
+        }
+        .sheet(isPresented: $showCourseCreate) {
+            CourseCreate()
+                .presentationDetents([.fraction(0.45)])
         }
     }
 }
