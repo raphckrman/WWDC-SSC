@@ -15,6 +15,7 @@ class FolderItem: Identifiable {
     var name: String
     var subject: String
     var lastReviewedDate: Date
+    var favorite: Bool
     var examDate: Date?
     
     init(name: String, subject: String, examDate: Date? = nil) {
@@ -23,5 +24,6 @@ class FolderItem: Identifiable {
         self.subject = subject
         self.lastReviewedDate = Date()
         self.examDate = examDate
+        self.favorite = false
     }
 }
