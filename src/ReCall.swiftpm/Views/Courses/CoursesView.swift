@@ -22,9 +22,13 @@ struct CoursesView: View {
                 ScrollView() {
                     VStack(spacing: 10) {
                         ForEach(folders, id: \.id) { folder in
-                            ContinueCourseCard(folder: folder)
-                                .transition(.move(edge: .trailing))
-                                .animation(.easeInOut(duration: 0.3), value: folders)
+                            ZStack {
+                                NavigationLink(destination: CourseView(folder: folder)) {
+                                }
+                                ContinueCourseCard(folder: folder)
+                                    .transition(.move(edge: .trailing))
+                                    .animation(.easeInOut(duration: 0.3), value: folders)
+                            }
                         }
                     }
                     .padding(.all, 40)
