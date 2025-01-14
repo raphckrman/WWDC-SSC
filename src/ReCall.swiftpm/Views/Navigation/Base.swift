@@ -46,15 +46,33 @@ struct BaseView<Content: View>: View {
     }
 }
 
-@ViewBuilder
-func sectionTitle(_ title: String, @ViewBuilder content: () -> some View) -> some View {
-    VStack(alignment: .leading, spacing: 10) {
-        Text(title)
-            .font(.title)
-            .fontWeight(.bold)
-            .padding(.horizontal)
-        content()
+struct sectionTitle<Content: View>: View {
+    let title: String
+    let content: () -> Content
+    let toolbarContent: (() -> AnyView)?
+
+    init(title: String, @ViewBuilder content: @escaping () -> Content, toolbarContent: (() -> AnyView)? = nil) {
+        self.title = title
+        self.content = content
+        self.toolbarContent = toolbarContent
     }
-    .frame(maxWidth: .infinity, alignment: .leading)
-    .padding(.bottom)
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Text(title)
+                    .font(.title)
+                    .fontWeight(.bold)
+                if let toolbarContent = toolbarContent {
+                    Spacer()
+                    toolbarContent()
+                }
+            }
+            .padding(.horizontal)
+
+            content()
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.bottom)
+    }
 }

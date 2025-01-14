@@ -13,7 +13,7 @@ struct UpcomingExamsSection: View {
     @Binding var selectedTab: Int
     
     var body: some View {
-        sectionTitle("Upcoming Exams") {
+        sectionTitle(title: "Upcoming Exams") {
             List {
                 Section {
                     if folders.isEmpty || !(folders.contains(where: { $0.examDate != nil })) {

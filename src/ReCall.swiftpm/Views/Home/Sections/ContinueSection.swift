@@ -15,7 +15,7 @@ struct ContinueSection: View {
     @State private var showCourseCreate = false
     
     var body: some View {
-        sectionTitle("Continue") {
+        sectionTitle(title: "Continue") {
             ScrollView(.horizontal) {
                 HStack(spacing: 12) {
                     Spacer()

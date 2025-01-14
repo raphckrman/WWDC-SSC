@@ -16,7 +16,7 @@ struct DailyGoalSection: View {
     @State private var showModal = false
 
     var body: some View {
-        sectionTitle("Daily Goal") {
+        sectionTitle(title: "Daily Goal") {
             HStack {
                 Spacer()
                 CircularProgressMaskedView(height: height, goal: CGFloat(DailyGoal*60), progression: 0)

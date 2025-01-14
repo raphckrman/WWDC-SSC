@@ -10,14 +10,13 @@ import SwiftUI
 @available(iOS 17, *)
 struct UpcomingExamCard: View {
     @Environment(\.modelContext) private var context
-
+    @State private var showCourseEdit = false
+    @State private var showAlert = false
+    
     let folder: FolderItem
-    var action: (() -> Void)? = nil
     
     var body: some View {
-        Button(action: {
-            action?()
-        }) {
+        NavigationLink(destination: CourseView(folder: folder)){
             HStack {
                 VStack(alignment: .leading) {
                     Text(folder.subject)
@@ -39,29 +38,39 @@ struct UpcomingExamCard: View {
                         .padding(.top, 10)
                     }
                 }
-                Spacer()
-                HStack {
-                    Image(systemName: "chevron.right")
-                        .foregroundColor(.primary.opacity(0.2))
-                }
             }
             .contextMenu {
                 Button(action: {
-                    print("Bookmark")
+                    folder.favorite = !folder.favorite
+                    try? context.save()
                 }) {
-                    Label("Add Bookmark", systemImage: "star")
+                    Label("Add Bookmark", systemImage: folder.favorite ? "bookmark.fill" : "bookmark")
                 }
-
                 Button(action: {
-                    print("Edit")
+                    showCourseEdit.toggle()
                 }) {
                     Label("Edit", systemImage: "pencil")
                 }
                 Button(role: .destructive, action: {
-                    context.delete(folder)
+                    showAlert.toggle()
                 }) {
                     Label("Delete", systemImage: "trash")
                 }
+            }
+            .sheet(isPresented: $showCourseEdit) {
+                CourseEdit(folder: folder)
+                    .presentationDetents([.fraction(0.45)])
+
+            }
+            .alert(isPresented: $showAlert) {
+                Alert(
+                    title: Text("Confirm Deletion"),
+                    message: Text("Are you sure you want to delete this item? This action cannot be undone."),
+                    primaryButton: .destructive(Text("Delete")) {
+                        context.delete(folder)
+                    },
+                    secondaryButton: .cancel()
+                )
             }
         }
     }
