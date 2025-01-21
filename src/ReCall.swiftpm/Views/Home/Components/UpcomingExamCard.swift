@@ -44,7 +44,7 @@ struct UpcomingExamCard: View {
                     folder.favorite = !folder.favorite
                     try? context.save()
                 }) {
-                    Label("Add Bookmark", systemImage: folder.favorite ? "bookmark.fill" : "bookmark")
+                    Label(folder.favorite ? "Remove Bookmark" : "Add Bookmark", systemImage: folder.favorite ? "bookmark.fill" : "bookmark")
                 }
                 Button(action: {
                     showCourseEdit.toggle()
