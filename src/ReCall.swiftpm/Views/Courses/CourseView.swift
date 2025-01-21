@@ -13,6 +13,7 @@ struct CourseView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var showCourseEdit = false
     @State private var showCourseAlert = false
+    @State private var showCardCreate = false
 
     var folder: FolderItem
     var body: some View {
@@ -42,24 +43,36 @@ struct CourseView: View {
                 //CourseAlert(icon: "clock.fill", text: "You haven't reviewed in a while, it's time to get back on track!", color: .orange)
                 
                 sectionTitle(title: "Flashcards") {
+                    ScrollView(.horizontal) {
+                        HStack(spacing: 12) {
+                            Spacer()
+                            ForEach(folder.flashcards, id: \.id) { flashcard in
+                                FlashcardCard(question: flashcard.question, answer: flashcard.answer, difficulty: flashcard.difficulty)
+                            }
+                            Spacer()
+                        }
+                    }
                 } toolbarContent: {
                     AnyView(
                         HStack {
                             Button("", systemImage: "plus.circle") {
-                                print("ok")
-                            }                        }
+                                showCardCreate.toggle()
+                            }
+                        }
                     )
                 }
                 sectionTitle(title: "Improvements") {
+                    ContentUnavailableView("No Improvements", systemImage: "chart.pie", description: Text("Study to get help!"))
                 }
                 sectionTitle(title: "Badges") {
+                    ContentUnavailableView("No Badges", systemImage: "play.circle", description: Text("Study to earn badges!"))
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         } toolbarContent: {
             AnyView(
                 HStack {
-                    Button("Bookmark", systemImage: folder.favorite ? "bookmark.fill" : "bookmark") {
+                    Button(folder.favorite ? "Remove Bookmark" : "Add Bookmark", systemImage: folder.favorite ? "bookmark.fill" : "bookmark") {
                         folder.favorite = !folder.favorite
                         try? context.save()
                     }
@@ -71,6 +84,10 @@ struct CourseView: View {
                     }
                 }
             )
+        }
+        .sheet(isPresented: $showCardCreate) {
+            CardCreate(folder: folder)
+                .presentationDetents([.fraction(0.43)])
         }
         .sheet(isPresented: $showCourseEdit) {
             CourseEdit(folder: folder)

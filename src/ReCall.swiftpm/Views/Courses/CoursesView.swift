@@ -12,16 +12,20 @@ import SwiftData
 struct CoursesView: View {
     @Query(sort: \FolderItem.name) var folders: [FolderItem]
     @State private var showCourseCreate = false
-    
+    @State private var filter: String = ""
+
     var body: some View {
         BaseView(title: "Courses") {
             if folders.isEmpty {
                 ContentUnavailableView("No Courses", systemImage: "note", description: Text("Create your first course !"))
                     .padding(.top, 200)
             } else {
+                
                 ScrollView() {
                     VStack(spacing: 10) {
-                        ForEach(folders, id: \.id) { folder in
+                        ForEach(folders.filter { folder in
+                            filter.isEmpty || folder.name.contains(filter)
+                        }, id: \.id) { folder in
                             ZStack {
                                 NavigationLink(destination: CourseView(folder: folder)) {
                                 }
@@ -52,6 +56,7 @@ struct CoursesView: View {
                 }
             )
         }
+        .searchable(text: $filter)
         .sheet(isPresented: $showCourseCreate) {
             CourseCreate()
                 .presentationDetents([.fraction(0.45)])
