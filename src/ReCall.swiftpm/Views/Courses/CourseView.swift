@@ -76,6 +76,9 @@ struct CourseView: View {
                         folder.favorite = !folder.favorite
                         try? context.save()
                     }
+                    Button("Learn", systemImage: "play") {
+                        print("Learn")
+                    }
                     Button("Delete", systemImage: "trash") {
                         showCourseAlert.toggle()
                     }

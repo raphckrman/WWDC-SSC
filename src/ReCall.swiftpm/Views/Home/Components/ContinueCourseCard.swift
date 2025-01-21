@@ -31,7 +31,7 @@ struct ContinueCourseCard: View {
                             .multilineTextAlignment(.leading)
                             .lineLimit(2)
 
-                        Text("22 Flashcards • 53%")
+                        Text("\(folder.flashcards.count) Flashcards • 53%")
                             .font(.subheadline)
                             .fontWeight(.medium)
                             .foregroundColor(.primary.opacity(0.6))
