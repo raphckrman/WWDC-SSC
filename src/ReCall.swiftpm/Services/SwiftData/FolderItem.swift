@@ -30,4 +30,13 @@ class FolderItem: Identifiable {
         self.favorite = false
         self.flashcards = []
     }
+    
+    func addFlashcard(question: String, answer: String, difficulty: CGFloat) {
+        let flashcard = FlashcardItem(folder: self, question: question, answer: answer, difficulty: difficulty)
+        flashcards.append(flashcard)
+    }
+    
+    func removeFlashcard(id: UUID) {
+        flashcards.removeAll { $0.id == id }
+    }
 }
