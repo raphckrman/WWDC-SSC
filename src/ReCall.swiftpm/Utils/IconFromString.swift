@@ -7,9 +7,19 @@
 
 func getIconFromString(word: String) -> String {
     let wordToIconMapping: [String: String] = [
-        "Science": "atom",
+        "General": "book.fill",
         "Mathematics": "function",
-        "Language": "character.bubble"
+        "Science": "atom",
+        "Language": "character.bubble",
+        "History": "calendar",
+        "Technology": "desktopcomputer",
+        "Art": "paintbrush.fill",
+        "Music": "music.note",
+        "Philosophy": "scissors",
+        "Psychology": "brain.head.profile.fill",
+        "Economics": "banknote.fill",
+        "Business": "briefcase.fill",
+        "Literature": "book.fill",
     ]
     
     return wordToIconMapping[word] ?? "book"

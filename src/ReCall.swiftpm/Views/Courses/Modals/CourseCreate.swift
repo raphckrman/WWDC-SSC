@@ -13,6 +13,14 @@ public enum CourseCategory: String, CaseIterable {
     case science = "Science"
     case language = "Language"
     case history = "History"
+    case technology = "Technology"
+    case art = "Art"
+    case music = "Music"
+    case philosophy = "Philosophy"
+    case psychology = "Psychology"
+    case economics = "Economics"
+    case business = "Business"
+    case literature = "Literature"
 }
 
 @available(iOS 17, *)

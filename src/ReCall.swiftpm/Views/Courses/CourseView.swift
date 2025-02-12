@@ -86,7 +86,7 @@ struct CourseView: View {
                 }
                 sectionTitle(title: "Improvements") {
                     if folder.flashcards.isEmpty {
-                        ContentUnavailableView("No Improvements", systemImage: "chart.pie", description: Text("Study to get help!"))
+                        ContentUnavailableView("No Improvements", systemImage: "chart.pie", description: Text("Learn to unlock improvements!"))
                             .padding(.top)
                     } else {
                         ScrollView(.horizontal) {
