@@ -15,10 +15,10 @@ struct ContentView: View {
                 Label("Courses", systemImage: "book.fill")
             }
             .tag(1)
-            BlankView().tabItem {
-                Label("Stats", systemImage: "chart.bar.fill")
-            }
-            .tag(2)
+//            BlankView().tabItem {
+//                Label("Stats", systemImage: "chart.bar.fill")
+//            }
+//            .tag(2)
             SettingsView().tabItem {
                 Label("Settings", systemImage: "gearshape.fill")
             }
