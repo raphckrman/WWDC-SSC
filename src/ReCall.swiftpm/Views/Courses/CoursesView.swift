@@ -25,7 +25,7 @@ struct CoursesView: View {
                     VStack(spacing: 10) {
                         ForEach(folders.filter { folder in
                             filter.isEmpty || folder.name.contains(filter)
-                        }, id: \.id) { folder in
+                        }.sorted { $0.favorite && !$1.favorite }, id: \.id) { folder in
                             ZStack {
                                 NavigationLink(destination: CourseView(folder: folder)) {
                                 }

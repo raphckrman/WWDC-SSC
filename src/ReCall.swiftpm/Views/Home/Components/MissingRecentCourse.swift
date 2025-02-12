@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MissingRecentCourse: View {
     var action: (() -> Void)? = nil
+    var title: String
 
     var body: some View {
         Button(action: {
@@ -19,7 +20,7 @@ struct MissingRecentCourse: View {
                     Image(systemName: "plus.circle")
                         .font(.title)
                         .foregroundColor(.primary.opacity(0.5))
-                    Text("Create my first course!")
+                    Text(title)
                         .font(.headline)
                         .foregroundColor(.primary.opacity(0.5))
                 }

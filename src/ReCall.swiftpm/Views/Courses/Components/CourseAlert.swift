@@ -25,7 +25,7 @@ struct CourseAlert: View {
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(color.opacity(0.1))
+        .background(color.opacity(0.2))
         .cornerRadius(16)
     }
 }

@@ -1,16 +1,18 @@
 //
-//  CardCreate.swift
+//  CardEdit.swift
 //  ReCall
 //
-//  Created by Raphaël on 18/01/2025.
+//  Created by Raphaël on 26/01/2025.
 //
 
 import SwiftUI
 
 @available(iOS 17.0, *)
-struct CardCreate: View {
+struct CardEdit: View {
     @Environment(\.modelContext) private var context
-    var folder: FolderItem
+    @Environment(\.presentationMode) var presentationMode
+
+    var card: FlashcardItem
     
     @State private var question: String = ""
     @State private var answer: String = ""
@@ -25,7 +27,6 @@ struct CardCreate: View {
             Form {
                 Section {
                     VStack {
-
                         TextField("Question", text: $question)
                             .textFieldStyle(.roundedBorder)
                         TextEditorView(text: $answer)
@@ -39,7 +40,7 @@ struct CardCreate: View {
                     }
                 }
             }
-            .navigationTitle("Create a Flashcard")
+            .navigationTitle("Edit Flashcard")
             .navigationBarTitleDisplayMode(.inline)
             .scrollIndicators(.hidden)
             .background(.clear)
@@ -49,7 +50,9 @@ struct CardCreate: View {
                     Button(action: {
                         if !isSaving {
                             isSaving.toggle()
-                            folder.addFlashcard(question: question, answer: answer, difficulty: CGFloat(difficulty))
+                            card.answer = answer
+                            card.question = question
+                            card.difficulty = CGFloat(difficulty)
                             do {
                                 try context.save()
                             } catch {
@@ -57,6 +60,7 @@ struct CardCreate: View {
                             }
                             question = ""
                             answer = ""
+                            presentationMode.wrappedValue.dismiss()
                             isSuccess.toggle()
                             
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
@@ -66,7 +70,7 @@ struct CardCreate: View {
                         }
                     }) {
                         ZStack {
-                            Image(systemName: "plus.circle")
+                            Image(systemName: "checkmark.circle")
                                 .font(.subheadline)
                                 .scaleEffect(isSaving ? 0.0 : 1.0)
                                 .animation(.easeInOut(duration: 0.40), value: isSaving)
@@ -78,6 +82,10 @@ struct CardCreate: View {
                         }
                     }
                 }
+            }
+            .onAppear {
+                question = card.question
+                answer = card.answer
             }
             .padding(.all, -15)
             .padding(.vertical, -30)

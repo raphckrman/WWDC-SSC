@@ -22,7 +22,7 @@ struct ContinueSection: View {
                     if folders.isEmpty {
                         MissingRecentCourse(action: {
                             showCourseCreate.toggle()
-                        })
+                        }, title: "Create my first course!")
                         TipsCard(sentence: "Frequent, short sessions are more effective than long cram sessions.")
                         TipsCard(sentence: "Study anytime, even without internet. This app works entirely offline.")
                         TipsCard(sentence: "Work for 25 minutes, then take a 5-minute break to stay focused and productive.")

@@ -30,8 +30,13 @@ struct ContinueCourseCard: View {
                             .foregroundColor(.primary)
                             .multilineTextAlignment(.leading)
                             .lineLimit(2)
+                        
+                        let totalFlashcards = folder.flashcards.count
+                        let reviewedFlashcards = folder.flashcards.filter { $0.nextReview > Date() }.count
 
-                        Text("\(folder.flashcards.count) Flashcards • 53%")
+                        let percentageReviewed: Double = totalFlashcards > 0 ? (Double(reviewedFlashcards) / Double(totalFlashcards)) * 100 : 0
+
+                        Text("\(totalFlashcards) Flashcards • \(Int(percentageReviewed))%")
                             .font(.subheadline)
                             .fontWeight(.medium)
                             .foregroundColor(.primary.opacity(0.6))
@@ -85,7 +90,6 @@ struct ContinueCourseCard: View {
         .sheet(isPresented: $showCourseEdit) {
             CourseEdit(folder: folder)
                 .presentationDetents([.fraction(0.45)])
-
         }
         .alert(isPresented: $showAlert) {
             Alert(

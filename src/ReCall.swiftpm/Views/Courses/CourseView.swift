@@ -13,7 +13,10 @@ struct CourseView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var showCourseEdit = false
     @State private var showCourseAlert = false
-    @State private var showCardCreate = false
+    @State private var showCardCreate: Bool = false
+    @State private var isStudying: Bool = false
+    @State private var finishedToReview = false
+    @State private var learnedCardsCount: Int = 0
 
     var folder: FolderItem
     var body: some View {
@@ -27,31 +30,51 @@ struct CourseView: View {
                     }
                     .opacity(0.7)
                     .frame(alignment: .leading)
-                    HStack {
-                        Image(systemName: "flame.fill")
-                        Text("Reviewed this course for 3 days in a row!")
-                            .font(.body)
+                    if folder.reviewCount > 1 {
+                        HStack {
+                            Image(systemName: "flame.fill")
+                            Text("You have reviewed this folder \(folder.reviewCount) times.")
+                                .font(.body)
+                        }
+                        .opacity(0.7)
+                        .frame(alignment: .leading)
                     }
-                    .opacity(0.7)
-                    .frame(alignment: .leading)
-                    CourseAlert(icon: "checkmark.seal.fill", text: "Great job! You’ve studied recently, take a break!", color: .green)
+                    let daysBeforeExam = folder.examDate.map { Calendar.current.dateComponents([.day], from: Date(), to: $0).day ?? 0 } ?? 0
+                    if daysBeforeExam < 7 && daysBeforeExam != 0 {
+                        CourseAlert(icon: "exclamationmark.triangle.fill", text: "Your exam is fast approaching, just \(daysBeforeExam) days to go.", color: .red)
+                    } else {
+                        if folder.nextReviewDate < Date() {
+                            CourseAlert(icon: "clock.fill", text: "You haven't reviewed in a while, it's time to get back on track!", color: .orange)
+                        } else {
+                            CourseAlert(icon: "checkmark.seal.fill", text: "Great job! You’ve studied recently, take a break!", color: .green)
+                        }
+                    }
                 }
                 .padding(.horizontal)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                //CourseAlert(icon: "exclamationmark.triangle.fill", text: "Your exam is fast approaching, just 3 days to go.", color: .red)
-                    //.padding(.top)
-                //CourseAlert(icon: "clock.fill", text: "You haven't reviewed in a while, it's time to get back on track!", color: .orange)
+                
                 
                 sectionTitle(title: "Flashcards") {
-                    ScrollView(.horizontal) {
-                        HStack(spacing: 12) {
-                            Spacer()
-                            ForEach(folder.flashcards, id: \.id) { flashcard in
-                                FlashcardCard(question: flashcard.question, answer: flashcard.answer, difficulty: flashcard.difficulty)
+                        ScrollView(.horizontal) {
+                            HStack(spacing: 12) {
+                                Spacer()
+                                if folder.flashcards.isEmpty {
+                                    MissingRecentCourse(action: {
+                                        showCardCreate.toggle()
+                                    }, title: "Create the first flashcard!")
+                                } else {
+                                    ForEach(folder.flashcards, id: \.id) { flashcard in
+                                        FlashcardCard(card: flashcard, folder: folder)
+                                            .transition(.move(edge: .trailing))
+                                            .animation(.easeInOut(duration: 0.3), value: folder.flashcards)
+                                    }
+                                }
+                                Spacer()
                             }
-                            Spacer()
-                        }
+                            .padding(.vertical, 30)
                     }
+                        .padding(.vertical, -30)
+
                 } toolbarContent: {
                     AnyView(
                         HStack {
@@ -62,10 +85,24 @@ struct CourseView: View {
                     )
                 }
                 sectionTitle(title: "Improvements") {
-                    ContentUnavailableView("No Improvements", systemImage: "chart.pie", description: Text("Study to get help!"))
-                }
-                sectionTitle(title: "Badges") {
-                    ContentUnavailableView("No Badges", systemImage: "play.circle", description: Text("Study to earn badges!"))
+                    if folder.flashcards.isEmpty {
+                        ContentUnavailableView("No Improvements", systemImage: "chart.pie", description: Text("Study to get help!"))
+                            .padding(.top)
+                    } else {
+                        ScrollView(.horizontal) {
+                            HStack(spacing: 12) {
+                                Spacer()
+                                ForEach(folder.flashcards.sorted(by: { $0.nextReview > $1.nextReview }), id: \.id) { flashcard in
+                                    FlashcardCard(card: flashcard, folder: folder)
+                                        .transition(.move(edge: .trailing))
+                                        .animation(.easeInOut(duration: 0.3), value: folder.flashcards)
+                                }
+                                Spacer()
+                            }
+                            .padding(.vertical, 30)
+                        }
+                        .padding(.vertical, -30)
+                    }
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -76,17 +113,33 @@ struct CourseView: View {
                         folder.favorite = !folder.favorite
                         try? context.save()
                     }
-                    Button("Learn", systemImage: "play") {
-                        print("Learn")
+                    if !folder.flashcards.isEmpty {
+                        NavigationLink(destination: LearningView(folder: folder, finishedToReview: $finishedToReview, learnedCardsCount: $learnedCardsCount)) {
+                            Label("Learn", systemImage: "play")
+                        }
                     }
                     Button("Delete", systemImage: "trash") {
                         showCourseAlert.toggle()
+                    }
+                    .alert(isPresented: $showCourseAlert) {
+                        Alert(
+                            title: Text("Confirm Deletion"),
+                            message: Text("Are you sure you want to delete this item? This action cannot be undone."),
+                            primaryButton: .destructive(Text("Delete")) {
+                                context.delete(folder)
+                                presentationMode.wrappedValue.dismiss()
+                            },
+                            secondaryButton: .cancel()
+                        )
                     }
                     Button("Edit", systemImage: "gearshape") {
                         showCourseEdit.toggle()
                     }
                 }
             )
+        }
+        .onDisappear {
+            learnedCardsCount = 0
         }
         .sheet(isPresented: $showCardCreate) {
             CardCreate(folder: folder)
@@ -96,16 +149,10 @@ struct CourseView: View {
             CourseEdit(folder: folder)
                 .presentationDetents([.fraction(0.45)])
         }
-        .alert(isPresented: $showCourseAlert) {
-            Alert(
-                title: Text("Confirm Deletion"),
-                message: Text("Are you sure you want to delete this item? This action cannot be undone."),
-                primaryButton: .destructive(Text("Delete")) {
-                    context.delete(folder)
-                    presentationMode.wrappedValue.dismiss()
-                },
-                secondaryButton: .cancel()
-            )
+        .sheet(isPresented: $finishedToReview) {
+            SuccessReview(folder: folder, learnedCardsCount: learnedCardsCount)
+                .presentationDetents([.fraction(0.45)])
+                .presentationBackground(.ultraThickMaterial)
         }
     }
 }

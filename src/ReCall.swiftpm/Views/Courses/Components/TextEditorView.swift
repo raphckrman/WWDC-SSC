@@ -17,24 +17,5 @@ struct TextEditorView: View {
             .textFieldStyle(.roundedBorder)
             .focused($isAnswerFocused)
             .border(.clear)
-            .toolbar {
-                if isAnswerFocused {
-                ToolbarItemGroup(placement: .keyboard) {
-                    Button("", systemImage: "document.viewfinder") {
-                        isAnswerFocused = false
-                    }
-                    .foregroundColor(.primary)
-                    Button("", systemImage: "paperclip") {
-                        isAnswerFocused = false
-                    }
-                    .foregroundColor(.primary)
-                    Button("", systemImage: "link") {
-                        isAnswerFocused = false
-                    }
-                    .foregroundColor(.primary)
-                    Spacer()
-                }
-            }
-        }
     }
 }
