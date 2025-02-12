@@ -58,4 +58,40 @@ class NotificationManager: ObservableObject {
             return false
         }
     }
+    
+    func removePendingNotifications() {
+        let center = UNUserNotificationCenter.current()
+        center.removeAllPendingNotificationRequests()
+    }
+    
+    func removePendingNotificationsForCategory(category: String) {
+        let center = UNUserNotificationCenter.current()
+
+        Task {
+            let requests = await center.pendingNotificationRequests()
+            let categoryNotifications = requests
+                .filter { $0.identifier.hasPrefix(category) }
+                .map { $0.identifier }
+
+            center.removePendingNotificationRequests(withIdentifiers: categoryNotifications)
+        }
+    }
+
+    func scheduleNotification(identifier: String, title: String, body: String, date: Date, category: String) {        
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = body
+        content.sound = UNNotificationSound.defaultCritical
+        content.interruptionLevel = .timeSensitive
+
+        let trigger = UNCalendarNotificationTrigger(
+           dateMatching: Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date),
+           repeats: false
+       )
+        
+        let request = UNNotificationRequest(identifier: category + "_" + identifier, content: content, trigger: trigger)
+
+        UNUserNotificationCenter.current().add(request)
+    }
+
 }

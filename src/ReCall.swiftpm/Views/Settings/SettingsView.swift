@@ -22,15 +22,9 @@ struct SettingsView: View {
             List {
                 Section(header: Text("General").offset(x: -15)) {
                     RowSettingsNavigation(title: "Notifications", icon: "bell.fill", color: Color.accentColor, destination: AnyView(NotificationsView()))
-                    RowSettingsToggle(title: "Haptics", icon: "waveform.path", color: Color.accentColor, isOn: $hapticsEnabled)
                     RowSettingsButton(title: "Daily Goal", icon: "target", color: Color.accentColor, action: {
                         showModal.toggle()
                     })
-                }
-                Section(header: Text("Stats").offset(x: -15)) {
-                    RowSettingsToggle(title: "Study Streak", icon: "flame.fill", color: Color.accentColor, isOn: $studyStreakEnabled)
-                    RowSettingsToggle(title: "Study Hours Tracking", icon: "clock.fill", color: Color.accentColor, isOn: $studyHoursTrackEnabled)
-                    RowSettingsToggle(title: "Progress Overview", icon: "chart.bar.fill", color: Color.accentColor, isOn: $progressOverviewEnabled)
                 }
                 Section(header: Text("Resources").offset(x: -15)) {
                     RowSettingsNavigation(title: "Tutorial", icon: "sparkles.tv.fill", color: Color.accentColor, destination: AnyView(BlankView()))
