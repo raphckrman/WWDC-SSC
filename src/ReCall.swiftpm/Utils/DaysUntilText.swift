@@ -14,7 +14,7 @@ func daysUntilText(from date: Date) -> String {
     
     if let daysBetween = calendar.dateComponents([.day], from: today, to: target).day {
         if daysBetween > 0 {
-            return "In \(daysBetween) days"
+            return "In \(daysBetween) \(daysBetween > 1 ? "days" : "day")"
         } else if daysBetween == 0 {
             return "Today"
         } else {
