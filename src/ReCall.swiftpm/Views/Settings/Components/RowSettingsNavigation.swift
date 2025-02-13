@@ -9,7 +9,7 @@ import SwiftUI
 
 struct RowSettingsNavigation: View {
     var title: String
-    var icon: String
+    var icon: String?
     var color: Color
     var destination: AnyView
     var url: String?
@@ -24,8 +24,10 @@ struct RowSettingsNavigation: View {
                     Text(title)
                         .foregroundStyle(Color.primary)
                 } icon: {
-                    Image(systemName: icon)
-                        .foregroundStyle(color)
+                    if (icon != nil) {
+                        Image(systemName: icon!)
+                            .foregroundStyle(color)
+                    }
                 }
             }
         } else {
@@ -34,8 +36,10 @@ struct RowSettingsNavigation: View {
                     Text(title)
                         .foregroundStyle(.primary)
                 } icon: {
-                    Image(systemName: icon)
-                        .foregroundStyle(color)
+                    if (icon != nil) {
+                        Image(systemName: icon!)
+                            .foregroundStyle(color)
+                    }
                 }
             }
         }

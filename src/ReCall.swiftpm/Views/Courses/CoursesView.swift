@@ -47,9 +47,6 @@ struct CoursesView: View {
         } toolbarContent: {
             AnyView(
                 HStack {
-                    Button("Filter", systemImage: "line.3.horizontal.decrease.circle") {
-                        print("Filtering Courses")
-                    }
                     Button("Create", systemImage: "plus.circle") {
                         showCourseCreate.toggle()
                     }

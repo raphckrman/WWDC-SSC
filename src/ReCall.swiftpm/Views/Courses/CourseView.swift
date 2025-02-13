@@ -71,9 +71,9 @@ struct CourseView: View {
                                 }
                                 Spacer()
                             }
-                            .padding(.vertical, 30)
+                            .padding(.vertical, 20)
                     }
-                        .padding(.vertical, -30)
+                        .padding(.vertical, -20)
 
                 } toolbarContent: {
                     AnyView(
@@ -138,12 +138,13 @@ struct CourseView: View {
                 }
             )
         }
+        .scrollDisabled(true)
         .onDisappear {
             learnedCardsCount = 0
         }
         .sheet(isPresented: $showCardCreate) {
             CardCreate(folder: folder)
-                .presentationDetents([.fraction(0.43)])
+                .presentationDetents([.fraction(0.50)])
         }
         .sheet(isPresented: $showCourseEdit) {
             CourseEdit(folder: folder)
