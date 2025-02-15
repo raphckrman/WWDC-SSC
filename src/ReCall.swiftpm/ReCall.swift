@@ -114,7 +114,7 @@ struct ReCall: App {
         let now = Date()
 
         var notificationTime = calendar.dateComponents([.year, .month, .day], from: now)
-        notificationTime.hour = 9
+        notificationTime.hour = 12
         notificationTime.minute = 0
 
         let today = calendar.date(from: notificationTime)!
