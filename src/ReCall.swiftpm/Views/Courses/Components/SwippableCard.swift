@@ -72,7 +72,7 @@ struct SwippableCard: View {
         .gesture(
             DragGesture()
                 .onChanged { gesture in
-                    offset = gesture.translation
+                    offset = isFlipped ? CGSize(width: -gesture.translation.width, height: gesture.translation.height) : gesture.translation
                 }
                 .onEnded { _ in
                     withAnimation {
@@ -88,6 +88,7 @@ struct SwippableCard: View {
     }
     
     func swipe(width: CGFloat) {
+        let width = isFlipped ? -width : width
         switch width {
         case -500...(-100):
             onSwipe?(card, false)

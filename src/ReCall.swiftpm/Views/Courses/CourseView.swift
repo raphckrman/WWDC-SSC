@@ -40,7 +40,7 @@ struct CourseView: View {
                         .frame(alignment: .leading)
                     }
                     let daysBeforeExam = folder.examDate.map { Calendar.current.dateComponents([.day], from: Date(), to: $0).day ?? 0 } ?? 0
-                    if daysBeforeExam < 7 && daysBeforeExam != 0 {
+                    if daysBeforeExam < 7 && daysBeforeExam != 0 && daysBeforeExam > 0 {
                         CourseAlert(icon: "exclamationmark.triangle.fill", text: "Your exam is fast approaching, just \(daysBeforeExam) days to go.", color: .red)
                     } else {
                         if folder.nextReviewDate < Date() {

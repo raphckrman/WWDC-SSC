@@ -31,7 +31,6 @@ struct DailyGoalSection: View {
                 Spacer()
                 VStack {
                     RoundedButton(title: "Start Studying", width: height)
-                    RoundedButton(title: "Add Reminder", width: height, primary: false)
                 }
                 Spacer()
             }

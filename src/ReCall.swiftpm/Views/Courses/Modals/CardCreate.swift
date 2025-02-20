@@ -25,7 +25,6 @@ struct CardCreate: View {
             Form {
                 Section {
                     VStack {
-
                         TextField("Question", text: $question)
                             .textFieldStyle(.roundedBorder)
                         TextEditorView(text: $answer)
@@ -37,12 +36,14 @@ struct CardCreate: View {
                             
                         }.pickerStyle(SegmentedPickerStyle())
                     }
+                    .background(.clear)
                 }
+                .background(.clear)
             }
+            .background(.clear)
             .navigationTitle("Create a Flashcard")
             .navigationBarTitleDisplayMode(.inline)
             .scrollIndicators(.hidden)
-            .background(.clear)
             .scrollContentBackground(.hidden)
             .toolbar {
                 ToolbarItemGroup(placement: .topBarTrailing) {

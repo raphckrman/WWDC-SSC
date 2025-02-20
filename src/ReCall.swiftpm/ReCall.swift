@@ -5,6 +5,7 @@ import SwiftData
 @available(iOS 17, *)
 struct ReCall: App {
     @StateObject private var notificationManager = NotificationManager()
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @Environment(\.scenePhase) private var scenePhase
     
     private let modelContainer: ModelContainer
@@ -29,6 +30,8 @@ struct ReCall: App {
         WindowGroup {
             ContentView()
                 .onAppear {
+                    AppDelegate.orientationLock = .portrait
+                    UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
                     Task {
                         await notificationManager.requestNotificationPermission()
                     }
@@ -121,5 +124,14 @@ struct ReCall: App {
         let notificationDate = calendar.date(byAdding: .day, value: 1, to: today)!
         
         notificationManager.scheduleNotification(identifier: "dailyGoal", title: "Daily Goal", body: "You set a goal of \(actualDailyGoal) minutes—let’s keep the streak going! 🔥", date: notificationDate, category: "dailyGoalNotifications")
+    }
+}
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+        
+    static var orientationLock = UIInterfaceOrientationMask.all //By default you want all your views to rotate freely
+
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        return AppDelegate.orientationLock
     }
 }
