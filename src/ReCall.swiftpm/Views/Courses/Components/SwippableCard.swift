@@ -16,12 +16,14 @@ struct SwippableCard: View {
     var card: FlashcardItem
     var onSwipe: ((FlashcardItem, Bool) -> Void)?
     
-    var width = CGFloat(320)
+    var width: CGFloat {
+            UIDevice.current.userInterfaceIdiom == .pad ? 520 : 320
+        }
     
     var body: some View {
         ZStack {
             Rectangle()
-                .frame(width: width, height: 420)
+                .frame(width: width, height: width * 1.3)
                 .foregroundColor(Color(UIColor.systemBackground))
                 .cornerRadius(3)
                 .overlay(

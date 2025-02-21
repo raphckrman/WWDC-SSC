@@ -143,6 +143,17 @@ struct LearningView: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            VStack(spacing: 5) {
+                Image(systemName: "rotate.left.fill")
+                    .font(.system(size: 35))
+                    .foregroundColor(Color(UIColor.gray))
+                Text("Swipe to the left if it's incorrect, to the right if it's correct!")
+                    .foregroundColor(Color(UIColor.gray))
+                    .frame(maxWidth: 325)
+                    .multilineTextAlignment(.center)
+
+            }
+            .padding(.bottom, 30)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .navigationBarBackButtonHidden(true)
