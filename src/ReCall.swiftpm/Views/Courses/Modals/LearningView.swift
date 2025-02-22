@@ -164,20 +164,20 @@ struct LearningView: View {
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                     VStack(spacing: 5) {
-                        Image(systemName: isRotatedLeft ? "rotate.left.fill" : "rotate.right.fill")
+                        Image(systemName: "hand.draw.fill")
                             .font(.system(size: 35))
                             .foregroundColor(Color(UIColor.gray))
                             .rotationEffect(.degrees(rotationAngle))
                             .animation(.easeInOut(duration: 0.3), value: rotationAngle)
                             .onAppear {
-                                Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { _ in
+                                Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in
                                     DispatchQueue.main.async {
                                         withAnimation {
                                             isRotatedLeft.toggle()
-                                            if rotationAngle == 360 {
-                                                rotationAngle -= 360
+                                            if rotationAngle == 30 {
+                                                rotationAngle -= 30
                                             } else {
-                                                rotationAngle += 360
+                                                rotationAngle += 30
                                             }
                                         }
                                     }
@@ -185,7 +185,6 @@ struct LearningView: View {
                             }
                         Text("Swipe to the left if it's incorrect, to the right if it's correct!")
                             .foregroundColor(Color(UIColor.gray))
-                            .frame(maxWidth: 325)
                             .multilineTextAlignment(.center)
                         
                     }
