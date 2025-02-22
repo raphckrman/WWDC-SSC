@@ -24,6 +24,10 @@ struct LearningView: View {
     @State private var isRotatedLeft = true
     @State private var rotationAngle: Double = 0
     
+    var unselectedCardOffset: CGFloat {
+        UIDevice.current.userInterfaceIdiom == .pad ? 30 : 20
+    }
+    
     init(folder: FolderItem, selectedCard: UUID? = nil, finishedToReview: Binding<Bool>, learnedCardsCount: Binding<Int>) {
         self.folder = folder
         
@@ -158,7 +162,7 @@ struct LearningView: View {
                             .id(flashcard.id)
                             .zIndex(isSelected ? 1 : 0)
                             .scaleEffect(isSelected ? 1.0 : 0.95)
-                            .offset(x: 0, y: isSelected ? 0 : 20)
+                            .offset(x: 0, y: isSelected ? 0 : unselectedCardOffset)
                             .disabled(!isSelected)
                         }
                     }
@@ -200,6 +204,16 @@ struct LearningView: View {
                 .animation(.easeInOut(duration: 0.3), value: finishedToReview)
             }
         }
+        .gesture(
+            DragGesture().onEnded { value in
+                if value.translation.width > 100 {
+                    presentationMode.wrappedValue.dismiss()
+                    if learnedCardsCount > 0 && !finishedToReview {
+                        folder.updateNextReviewDate()
+                    }
+                }
+            }
+        )
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(leading: finishedToReview ? AnyView(backButton) : learnedCardsCount > 0 ? AnyView(finishButton) : AnyView(backButton))
