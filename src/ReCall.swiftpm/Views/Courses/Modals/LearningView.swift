@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@MainActor
 @available(iOS 17, *)
 struct LearningView: View {
     var folder: FolderItem
@@ -18,6 +19,9 @@ struct LearningView: View {
     @Binding var finishedToReview: Bool
     @Binding var learnedCardsCount: Int
     @State private var resetOffsetTimerActive = false
+    
+    @State private var isRotatedLeft = true
+    @State private var rotationAngle: Double = 0
     
     init(folder: FolderItem, selectedCard: UUID? = nil, finishedToReview: Binding<Bool>, learnedCardsCount: Binding<Int>) {
         self.folder = folder
@@ -59,10 +63,8 @@ struct LearningView: View {
         }
 
         if remainingFlashcards.isEmpty {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                finishedToReview = true
-                presentationMode.wrappedValue.dismiss()
-            }
+            folder.updateNextReviewDate()
+            finishedToReview = true
             selectedCardIndex = 0
         } else {
             selectedCardIndex = (selectedCardIndex + 1) % remainingFlashcards.count
@@ -77,6 +79,19 @@ struct LearningView: View {
                 .aspectRatio(contentMode: .fit)
                 .foregroundColor(.accentColor)
                 Text("Go Back")
+            }
+        }
+    }
+    
+    var finishButton : some View { Button(action: {
+        finishedToReview = true
+        folder.updateNextReviewDate()
+        }) {
+            HStack {
+                Image(systemName: "chevron.left")
+                .aspectRatio(contentMode: .fit)
+                .foregroundColor(.accentColor)
+                Text("Finish")
             }
         }
     }
@@ -115,56 +130,81 @@ struct LearningView: View {
                     .padding(.top, 70)
                     .padding(.horizontal, 0)
             )
-            
-            ZStack(alignment: .center) {
-                ForEach(remainingFlashcards, id: \.id) { flashcard in
-                    let isSelected = flashcard.id == remainingFlashcards[selectedCardIndex].id
-                    let resetOffset = isSelected && !resetOffsetTimerActive
-                    
-                    SwippableCard(
-                        resetOffset: resetOffset,
-                        card: flashcard,
-                        onSwipe: { swipedCard, isSuccess in
-                            handleCardSwipe(flashcard: swipedCard, isSuccess: isSuccess)
-                            if remainingFlashcards.count == 1 {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                    resetOffsetTimerActive = false
+            ZStack {
+                VStack {
+                    ZStack(alignment: .center) {
+                        ForEach(remainingFlashcards, id: \.id) { flashcard in
+                            let isSelected = flashcard.id == remainingFlashcards[selectedCardIndex].id
+                            let resetOffset = isSelected && !resetOffsetTimerActive
+                            
+                            SwippableCard(
+                                resetOffset: resetOffset,
+                                card: flashcard,
+                                onSwipe: { swipedCard, isSuccess in
+                                    handleCardSwipe(flashcard: swipedCard, isSuccess: isSuccess)
+                                    if remainingFlashcards.count == 1 {
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                            resetOffsetTimerActive = false
+                                        }
+                                        
+                                        resetOffsetTimerActive = true
+                                    }
                                 }
-                                
-                                resetOffsetTimerActive = true
-                            }
+                            )
+                            .id(flashcard.id)
+                            .zIndex(isSelected ? 1 : 0)
+                            .scaleEffect(isSelected ? 1.0 : 0.95)
+                            .offset(x: 0, y: isSelected ? 0 : 20)
+                            .disabled(!isSelected)
                         }
-                    )
-                    .id(flashcard.id)
-                    .zIndex(isSelected ? 1 : 0)
-                    .scaleEffect(isSelected ? 1.0 : 0.95)
-                    .offset(x: 0, y: isSelected ? 0 : 20)
-                    .disabled(!isSelected)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                    VStack(spacing: 5) {
+                        Image(systemName: isRotatedLeft ? "rotate.left.fill" : "rotate.right.fill")
+                            .font(.system(size: 35))
+                            .foregroundColor(Color(UIColor.gray))
+                            .rotationEffect(.degrees(rotationAngle))
+                            .animation(.easeInOut(duration: 0.3), value: rotationAngle)
+                            .onAppear {
+                                Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { _ in
+                                    DispatchQueue.main.async {
+                                        withAnimation {
+                                            isRotatedLeft.toggle()
+                                            if rotationAngle == 360 {
+                                                rotationAngle -= 360
+                                            } else {
+                                                rotationAngle += 360
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        Text("Swipe to the left if it's incorrect, to the right if it's correct!")
+                            .foregroundColor(Color(UIColor.gray))
+                            .frame(maxWidth: 325)
+                            .multilineTextAlignment(.center)
+                        
+                    }
+                    .padding(.bottom, 30)
                 }
+                .opacity(finishedToReview ? 0 : 1)
+                .animation(.easeInOut(duration: 0.3), value: finishedToReview)
+                
+                VStack {
+                    SuccessReview(folder: folder, learnedCardsCount: learnedCardsCount)
+                }
+                .opacity(finishedToReview ? 1 : 0)
+                .animation(.easeInOut(duration: 0.3), value: finishedToReview)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-            VStack(spacing: 5) {
-                Image(systemName: "rotate.left.fill")
-                    .font(.system(size: 35))
-                    .foregroundColor(Color(UIColor.gray))
-                Text("Swipe to the left if it's incorrect, to the right if it's correct!")
-                    .foregroundColor(Color(UIColor.gray))
-                    .frame(maxWidth: 325)
-                    .multilineTextAlignment(.center)
-
-            }
-            .padding(.bottom, 30)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: backButton)
+        .navigationBarItems(leading: finishedToReview ? AnyView(backButton) : learnedCardsCount > 0 ? AnyView(finishButton) : AnyView(backButton))
         .statusBarHidden(true)
         .toolbar(.hidden, for: .tabBar)
         .onDisappear {
-            if learnedCardsCount > 0 {
-                finishedToReview = true
-                folder.updateNextReviewDate()
-            }
+            finishedToReview = false
+            learnedCardsCount = 0
         }
     }
 }

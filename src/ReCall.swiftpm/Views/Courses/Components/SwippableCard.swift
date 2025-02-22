@@ -11,25 +11,36 @@ import SwiftUI
 struct SwippableCard: View {
     @State private var offset = CGSize.zero
     @State private var isFlipped = false
+    @State private var showIcon = false
     var resetOffset: Bool
-    
+
     var card: FlashcardItem
     var onSwipe: ((FlashcardItem, Bool) -> Void)?
-    
+
     var width: CGFloat {
-            UIDevice.current.userInterfaceIdiom == .pad ? 520 : 320
+        UIDevice.current.userInterfaceIdiom == .pad ? 520 : 320
+    }
+
+    var swipeDirection: String? {
+        if offset.width > 50 {
+            return "plus"
+        } else if offset.width < -50 {
+            return "minus"
         }
-    
+        return nil
+    }
+
     var body: some View {
         ZStack {
             Rectangle()
                 .frame(width: width, height: width * 1.3)
                 .foregroundColor(Color(UIColor.systemBackground))
-                .cornerRadius(3)
+                .cornerRadius(16)
                 .overlay(
                     RoundedRectangle(cornerRadius: 16)
                         .stroke(Color.gray, lineWidth: 3)
                 )
+
             VStack {
                 if isFlipped {
                     Text(card.question)
@@ -56,6 +67,18 @@ struct SwippableCard: View {
                 }
             }
             .frame(width: width * 0.95)
+            
+            if let direction = swipeDirection {
+                Image(systemName: direction == "plus" ? "plus.circle.fill" : "minus.circle.fill")
+                    .foregroundColor(direction == "plus" ? .green : .red)
+                    .font(.system(size: 30))
+                    .opacity(showIcon ? 1 : 0)
+                    .animation(.easeInOut(duration: 0.2), value: showIcon)
+                    .offset(
+                        x: direction == "plus" ? -width / 2 + 30 : width / 2 - 30,
+                        y: -width * 1.3 / 2 + 30
+                    )
+            }
         }
         .offset(x: offset.width, y: offset.height * 0.4)
         .rotationEffect(.degrees(Double(offset.width / 40)))
@@ -75,10 +98,14 @@ struct SwippableCard: View {
             DragGesture()
                 .onChanged { gesture in
                     offset = isFlipped ? CGSize(width: -gesture.translation.width, height: gesture.translation.height) : gesture.translation
+                    withAnimation {
+                        showIcon = swipeDirection != nil
+                    }
                 }
                 .onEnded { _ in
                     withAnimation {
                         swipe(width: offset.width)
+                        showIcon = false
                     }
                 }
         )
@@ -88,7 +115,7 @@ struct SwippableCard: View {
             }
         }
     }
-    
+
     func swipe(width: CGFloat) {
         let width = isFlipped ? -width : width
         switch width {

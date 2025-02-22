@@ -150,10 +150,5 @@ struct CourseView: View {
             CourseEdit(folder: folder)
                 .presentationDetents([.fraction(0.45)])
         }
-        .sheet(isPresented: $finishedToReview) {
-            SuccessReview(folder: folder, learnedCardsCount: learnedCardsCount)
-                .presentationDetents([.fraction(0.45)])
-                .presentationBackground(.ultraThickMaterial)
-        }
     }
 }

@@ -14,13 +14,6 @@ struct SuccessReview: View {
 
     var body: some View {
         ZStack {
-            LinearGradient(
-                colors: [.accentColor.opacity(0.2), .clear, .clear],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .ignoresSafeArea()
-
             VStack {
                 Spacer()
                 Image(systemName: "medal.fill")
@@ -30,7 +23,7 @@ struct SuccessReview: View {
                     .font(.title3)
                     .fontWeight(.semibold)
                     .padding(.top, 5)
-                Text("You reviewed \(learnedCardsCount) cards out of \(folder.flashcards.count)!")
+                Text("You reviewed \(learnedCardsCount) \(learnedCardsCount >  1 ? "cards" : "card") out of \(folder.flashcards.count)!")
                     .font(.title3)
                     .fontWeight(.regular)
                 
