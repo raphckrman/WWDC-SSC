@@ -14,6 +14,7 @@ struct DailyGoalSection: View {
         }
     @AppStorage("dailyGoal") private var DailyGoal: Int = 10
     @State private var showModal = false
+    @Binding var selectedTab: Int
 
     var body: some View {
         sectionTitle(title: "Daily Goal") {
@@ -23,6 +24,7 @@ struct DailyGoalSection: View {
                     .padding()
                     .padding(.top, UIDevice.current.userInterfaceIdiom == .pad ? 50 : 0)
                     .onLongPressGesture {
+                        feedback()
                         showModal.toggle()
                    }
                 Spacer()
@@ -30,7 +32,10 @@ struct DailyGoalSection: View {
             HStack {
                 Spacer()
                 VStack {
-                    RoundedButton(title: "Start Studying", width: height)
+                    RoundedButton(title: "Start Studying", width: height, action: {
+                        feedback()
+                        selectedTab = 1
+                    })
                 }
                 Spacer()
             }

@@ -59,7 +59,7 @@ struct CardCreate: View {
                             question = ""
                             answer = ""
                             isSuccess.toggle()
-                            
+                            feedback()
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                 isSuccess = false
                                 isSaving = false

@@ -67,7 +67,7 @@ struct CourseCreate: View {
                     Button(action: {
                         let newFolder = FolderItem(name: courseName, subject: selectedCategory.rawValue, examDate: hasExam ? examDate : nil)
                         context.insert(newFolder)
-                        
+                        feedback()
                         presentationMode.wrappedValue.dismiss()
                     }) {
                         Image(systemName: "plus.circle")

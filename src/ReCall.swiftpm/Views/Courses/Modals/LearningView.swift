@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AudioToolbox
 
 @MainActor
 @available(iOS 17, *)
@@ -65,6 +66,7 @@ struct LearningView: View {
         if remainingFlashcards.isEmpty {
             folder.updateNextReviewDate()
             finishedToReview = true
+            longVibration()
             selectedCardIndex = 0
         } else {
             selectedCardIndex = (selectedCardIndex + 1) % remainingFlashcards.count
@@ -86,6 +88,7 @@ struct LearningView: View {
     var finishButton : some View { Button(action: {
         finishedToReview = true
         folder.updateNextReviewDate()
+        longVibration()
         }) {
             HStack {
                 Image(systemName: "chevron.left")
@@ -141,6 +144,7 @@ struct LearningView: View {
                                 resetOffset: resetOffset,
                                 card: flashcard,
                                 onSwipe: { swipedCard, isSuccess in
+                                    feedback()
                                     handleCardSwipe(flashcard: swipedCard, isSuccess: isSuccess)
                                     if remainingFlashcards.count == 1 {
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {

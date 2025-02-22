@@ -12,11 +12,12 @@ struct ContinueCourseCard: View {
     @Environment(\.modelContext) private var context
     @State private var showCourseEdit = false
     @State private var showAlert = false
+    @State private var isNavigating = false
 
     var folder: FolderItem
 
     var body: some View {
-        NavigationLink(destination: CourseView(folder: folder)) {
+        NavigationLink(destination: CourseView(folder: folder), isActive: $isNavigating) {
             VStack {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading) {
@@ -72,6 +73,7 @@ struct ContinueCourseCard: View {
                 Button(action: {
                     folder.favorite = !folder.favorite
                     try? context.save()
+                    feedback()
                 }) {
                     Label(folder.favorite ? "Remove Bookmark" : "Add Bookmark", systemImage: folder.favorite ? "bookmark.fill" : "bookmark")
                 }
@@ -87,6 +89,11 @@ struct ContinueCourseCard: View {
                 }
             }
         }
+        .onChange(of: isNavigating) { newValue in
+                    if newValue {
+                        feedback()
+                    }
+                }
         .sheet(isPresented: $showCourseEdit) {
             CourseEdit(folder: folder)
                 .presentationDetents([.fraction(0.45)])

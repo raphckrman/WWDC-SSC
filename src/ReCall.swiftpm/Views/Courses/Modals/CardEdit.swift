@@ -62,7 +62,7 @@ struct CardEdit: View {
                             answer = ""
                             presentationMode.wrappedValue.dismiss()
                             isSuccess.toggle()
-                            
+                            feedback()
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                 isSuccess = false
                                 isSaving = false

@@ -55,6 +55,7 @@ struct CourseEdit: View {
                         folder.subject = selectedCategory.rawValue
                         folder.examDate = hasExam ? examDate : nil
                         try? context.save()
+                        feedback()
                         presentationMode.wrappedValue.dismiss()
                     }) {
                         Text("Save")

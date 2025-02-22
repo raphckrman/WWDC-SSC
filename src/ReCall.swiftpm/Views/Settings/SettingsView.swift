@@ -25,6 +25,7 @@ struct SettingsView: View {
                     RowSettingsButton(title: "Daily Goal", icon: "target", color: Color.accentColor, action: {
                         showModal.toggle()
                     })
+                    RowSettingsToggle(title: "Haptics", icon: "iphone.gen3.radiowaves.left.and.right", color: Color.accentColor, isOn: $hapticsEnabled)
                 }
                 Section(header: Text("Resources").offset(x: -15)) {
                     RowSettingsNavigation(title: "Tutorial", icon: "sparkles.tv.fill", color: Color.accentColor, destination: AnyView(BlankView()))

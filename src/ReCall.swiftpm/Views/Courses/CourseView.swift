@@ -112,6 +112,7 @@ struct CourseView: View {
                     Button(folder.favorite ? "Remove Bookmark" : "Add Bookmark", systemImage: folder.favorite ? "bookmark.fill" : "bookmark") {
                         folder.favorite = !folder.favorite
                         try? context.save()
+                        feedback()
                     }
                     if !folder.flashcards.isEmpty {
                         NavigationLink(destination: LearningView(folder: folder, finishedToReview: $finishedToReview, learnedCardsCount: $learnedCardsCount)) {
@@ -128,6 +129,7 @@ struct CourseView: View {
                             primaryButton: .destructive(Text("Delete")) {
                                 context.delete(folder)
                                 presentationMode.wrappedValue.dismiss()
+                                feedback()
                             },
                             secondaryButton: .cancel()
                         )
