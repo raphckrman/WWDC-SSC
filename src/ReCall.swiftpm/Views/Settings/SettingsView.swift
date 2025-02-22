@@ -28,7 +28,6 @@ struct SettingsView: View {
                     RowSettingsToggle(title: "Haptics", icon: "iphone.gen3.radiowaves.left.and.right", color: Color.accentColor, isOn: $hapticsEnabled)
                 }
                 Section(header: Text("Resources").offset(x: -15)) {
-                    RowSettingsNavigation(title: "Tutorial", icon: "sparkles.tv.fill", color: Color.accentColor, destination: AnyView(BlankView()))
                     RowSettingsNavigation(title: "Acknowledgments", icon: "person.2.fill", color: Color.accentColor, destination: AnyView(AcknowledgmentsView()))
                     RowSettingsNavigation(title: "GitHub Repository", icon: "curlybraces.square.fill", color: Color.accentColor, destination: AnyView(BlankView()), url: "https://github.com/raphckrman/WWDC-SSC")
                 }
