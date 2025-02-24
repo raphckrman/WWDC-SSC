@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://i.ibb.co/31947wq/Git-Hub-Social-Preview.png" alt="Publish" style="display: block; margin: 0 auto; width: 100%;">
+    <img src="https://i.ibb.co/7NBbMGDZ/Shot.png" alt="Publish" style="display: block; margin: 0 auto; width: 100%;">
 </p>
 <p align="center">
   <a>
