@@ -3,7 +3,7 @@
 </p>
 <p align="center">
   <a>
-    <img src="https://img.shields.io/badge/Status-Waiting Submission-orange" alt="Publish">
+    <img src="https://img.shields.io/badge/Status-Rejected-red" alt="Publish">
   </a>
   <a>
     <img src="https://img.shields.io/badge/Stack-Swift-red" alt="Publish">
